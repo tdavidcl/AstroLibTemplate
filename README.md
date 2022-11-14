@@ -9,14 +9,24 @@ Would be nice to take inspiration from https://github.com/g-truc/glm, a long sta
 
 ```
 .
-├── **lib name**
+├── **lib name** (only headers here)
 │   ├── header1.hpp
 │   └── dir1 ....
+├── src
+│   ├── ... (c++ -> c wrapper) 
+│   └── CMakeLists.txt
 ├── tests
 │   ├── unitests
 │   ├── physical_test
 │   └── ...
+├── doc
+│   ├── doc.ipynb
+│   └── ...
 └── wrapper
+    ├── pyAstroLib (c -> py wrapper)
+    ├── rustAstroLib (c -> rust wrapper)
+    ├── brainfuckAstroLib (c -> brainfuck wrapper)
+    └── ...
 ```
 
 
@@ -37,8 +47,12 @@ Would be nice to take inspiration from https://github.com/g-truc/glm, a long sta
  ////// when using in codes
  #include <libname/libname.hpp>
  
- //////////////// libname.hpp //////////////// 
+  //////////////// libname.hpp //////////////// 
+ #pragma once
+ #include "backend.hpp"
  
+ ///////////// libname/backend.hpp //////////// 
+ #pragma once
  namespace libname {
  
  
@@ -58,9 +72,6 @@ Would be nice to take inspiration from https://github.com/g-truc/glm, a long sta
     #endif
     
     ..
-    
-    
-    
     
     //forward declaration of the init/finalize fct
     void backend_init();
