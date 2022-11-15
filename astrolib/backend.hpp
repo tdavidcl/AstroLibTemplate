@@ -1,7 +1,100 @@
 #pragma once
 
-namespace libname {
+#include <string>
 
+
+
+////////////////////////////////////////////////
+// define the library name for logs
+////////////////////////////////////////////////
+#define LIBNAME "AstroLib"
+////////////////////////////////////////////////
+
+
+
+////////////////////////////////////////////////
+// logic to check backend modes
+////////////////////////////////////////////////
+constexpr std::string_view libname = LIBNAME;
+
+//#define BACKEND_CPP
+//#define BACKEND_SYCL
+//#define BACKEND_KOKKOS
+//#define BACKEND_HIP
+//#define BACKEND_CUDA
+
+#ifdef BACKEND_CPP
+#define BACKEND_CPP_CHOSEN
+#endif
+
+#define BACKEND_CPP
+
+#ifdef BACKEND_SYCL
+#undef BACKEND_CPP
+#endif
+
+#ifdef BACKEND_KOKKOS
+#undef BACKEND_CPP
+#endif
+
+#ifdef BACKEND_HIP
+#undef BACKEND_CPP
+#endif
+
+#ifdef BACKEND_CUDA
+#undef BACKEND_CPP
+#endif
+
+constexpr auto selected_backend = []() -> int {
+    return 
+        0
+        #ifdef BACKEND_CPP_CHOSEN
+        +1
+        #endif
+        #ifdef BACKEND_SYCL
+        +1
+        #endif
+        #ifdef BACKEND_KOKKOS
+        +1
+        #endif
+        #ifdef BACKEND_HIP
+        +1
+        #endif
+        #ifdef BACKEND_CUDA
+        +1
+        #endif
+    ;
+};
+
+static_assert(selected_backend() <= 1,LIBNAME" : you can not use two backend simultaneously"
+" Selected backends : "
+#ifdef BACKEND_CPP_CHOSEN
+"CPP "
+#endif
+#ifdef BACKEND_SYCL
+"SYCL "
+#endif
+#ifdef BACKEND_KOKKOS
+"KOKKOS "
+#endif
+#ifdef BACKEND_HIP
+"HIP "
+#endif
+#ifdef BACKEND_CUDA
+"CUDA "
+#endif
+);
+
+#undef LIBNAME
+#undef BACKEND_CPP_CHOSEN
+////////////////////////////////////////////////
+////////////////////////////////////////////////
+////////////////////////////////////////////////
+
+
+
+
+namespace astro {
 
     // option 1
     // issues : - repetitive declaration
@@ -39,8 +132,5 @@ namespace libname {
 
     //forward declaration of the init/finalize fct
     //backend init and finalize are declared & impl in respective backends
-
-    void init();
-    void finalize();
 
 }
